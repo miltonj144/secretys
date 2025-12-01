@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  name              String?
+  role              String   @default("fan")
+  subscriptions     String[] @default([])
+  stripeCustomerId  String?
+  createdAt         DateTime @default(now())
+}
+
+model Creator {
+  id               String  @id @default(uuid())
+  name             String
+  handle           String  @unique
+  bio              String?
+  avatarUrl        String?
+  price            Float
+  stripeAccountId  String?
+  subscribers      Int     @default(0)
+  createdAt        DateTime @default(now())
+}
+
+model Post {
+  id         String   @id @default(uuid())
+  creatorId  String
+  title      String
+  contentUrl String
+  isPrivate  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
